@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>To-Do List</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        margin: 20px;
+    }
+    .todo-container {
+        max-width: 600px;
+        margin: auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .task-list {
+        list-style-type: none;
+        padding: 0;
+    }
+    .task-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid #ccc;
+        padding: 10px 0;
+    }
+    .task-item .task-name {
+        flex: 1;
+    }
+    .task-item .actions {
+        margin-left: 10px;
+    }
+</style>
+</head>
+<body>
+    <div class="todo-container">
+        <h2>To-Do List</h2>
+        <form id="todo-form">
+            <input type="text" id="task-input" placeholder="Enter a new task...">
+            <button type="submit">Add Task</button>
+        </form>
+        <ul class="task-list" id="task-list">
+            <!-- Tasks will be dynamically added here -->
+        </ul>
+    </div>
+
+    <script>
+        // Function to add a new task
+        function addTask(taskName) {
+            const taskList = document.getElementById('task-list');
+            const taskItem = document.createElement('li');
+            taskItem.className = 'task-item';
+            taskItem.innerHTML = `
+                <span class="task-name">${taskName}</span>
+                <span class="actions">
+                    <button onclick="completeTask(this)">Complete</button>
+                    <button onclick="editTask(this)">Edit</button>
+                    <button onclick="deleteTask(this)">Delete</button>
+                </span>
+            `;
+            taskList.appendChild(taskItem);
+        }
+
+        // Function to handle form submission
+        document.getElementById('todo-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const taskInput = document.getElementById('task-input');
+            const taskName = taskInput.value.trim();
+            if (taskName !== '') {
+                addTask(taskName);
+                taskInput.value = '';
+            }
+        });
+
+        // Function to mark task as completed
+        function completeTask(button) {
+            const taskItem = button.parentNode.parentNode;
+            taskItem.classList.toggle('completed');
+        }
+
+        // Function to edit task
+        function editTask(button) {
+            const taskItem = button.parentNode.parentNode;
+            const taskNameElement = taskItem.querySelector('.task-name');
+            const newTaskName = prompt('Edit task:', taskNameElement.textContent);
+            if (newTaskName !== null && newTaskName.trim() !== '') {
+                taskNameElement.textContent = newTaskName;
+            }
+        }
+
+        // Function to delete task
+        function deleteTask(button) {
+            const taskItem = button.parentNode.parentNode;
+            taskItem.remove();
+        }
+    </script>
+</body>
+</html>
